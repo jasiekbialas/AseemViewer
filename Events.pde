@@ -148,5 +148,5 @@ void rerenderZoom(int sign) {
   
   map = createGraphics(map_width*9/scale, map_height*9/scale);
 
-  renderManhattan();
+  renderMap();
 }

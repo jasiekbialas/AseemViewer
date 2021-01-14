@@ -6,6 +6,7 @@ map_height = 820,
 no_of_vehicles = 2000;
 
 String logs_path = "data/fullLog2.log";
+String map_path = "manhattan-compressed.dot";
 
 //AVAILABLE = 0, ASSIGNED = 1, ENROUTE = 2;
 PVector[] state_col = { 
@@ -68,7 +69,7 @@ void setup() {
   test.rect(200, 200, 100, 100);
   test.endDraw();
   
-  renderManhattan();
+  renderMap();
   renderCardboard();
 
   initVehicles();
@@ -148,11 +149,11 @@ void handleSelected() {
   vehicles_layer.stroke(255, 0, 0);
   vehicles_layer.strokeWeight(3);
   vehicles_layer.circle(vehicles[selected].curr_position.x, vehicles[selected].curr_position.y, 10 + 27/scale);
-} 
+}  //<>//
 
 void displayText() {
   
-  fill(0);
+  fill(0); //<>//
   textSize(10);
   
   text("time:", 55, 45);
@@ -163,7 +164,7 @@ void displayText() {
   
 
   text(str(float(speed)/10), 300, 45);
-  text(str(scale), 500, 45);
+  text(str(scale), 500, 45); //<>//
   
   textSize(22);
   text(str(time/10), 90, 45);
@@ -174,12 +175,12 @@ void displayText() {
 void drawLayers() {
 
   fill(255, 0);
-  stroke(0);
+  stroke(0); //<>//
   
   image(map, 50+moved.x, 50+moved.y);
   image(vehicles_layer, 50, 50);
 
-  image(cardboard, 0, 0);
+  image(cardboard, 0, 0); //<>//
   rect(50, 50, map_width, map_height);
   
 }

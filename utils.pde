@@ -76,18 +76,20 @@ Point transform(float x, float y) {
   return new Point(int(y), int(x));
 }
 
-void renderManhattan() {
+void renderMap() {
+  int n = 4160;    // NUMBER OF VERTICES
   String[] list;
   String line;
-  Point[] manhattan;
+  Point[] vertices;
+  
   
   try {
       
-      BufferedReader reader = createReader("manhattan-compressed.dot");
+      BufferedReader reader = createReader(map_path);
       line = reader.readLine();
       float x, y;
-      int n = 4160;
-      manhattan = new Point[n];
+
+      vertices = new Point[n];
       
       for(int i = 0; i < n; i++) {
         line = reader.readLine();
@@ -96,8 +98,8 @@ void renderManhattan() {
         x = float(split(list[2], ",")[0]);
         y = float(split(list[3], ",")[0]);
   
-        manhattan[i] = transform(x, y);
-        manhattan[i].div(scale);
+        vertices[i] = transform(x, y);
+        vertices[i].div(scale);
       }
       
       int a, b;
@@ -113,10 +115,10 @@ void renderManhattan() {
         a = int(split(list[0], "->")[0]);
         b = int(split(list[0], "->")[1]);
         map.line(
-          manhattan[a].x,
-          manhattan[a].y,
-          manhattan[b].x,
-          manhattan[b].y
+          vertices[a].x,
+          vertices[a].y,
+          vertices[b].x,
+          vertices[b].y
          );
         
       }
