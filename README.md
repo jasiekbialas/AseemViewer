@@ -2,7 +2,7 @@
 Viewer for Aseem logs written in processing.
 
 ## Startup
-Add a path to fmLog.log file in 8th line of "viever4.pde" (logs_path):
+Add a path to fmLog.log file in 8th line of "viever4.pde" (`logs_path`):
 ```
 String logs_path = "data/fullLog2.log";
 ```
@@ -33,3 +33,13 @@ initiation of vehicles. In other case it will be first booking request. Time can
 | `t` | (un)triger rendering trail for selected vehicle |
 | `f` | (un) trigger following the selected vehicle |
 | `r` | stops/starts rendering, (pause with space still renders, just doesn't change the time) |
+
+## Different map
+
+At this point viewer loads manhattan map very naively. Here are the steps to load other location:
+- change `map_path` to path to your .dot map
+- change `n` in `utils.pde` line 80 to number of vertices in your .dot file
+- change `transform` function in `utils.pde` (line 57) to transform UTM coordinates to values:
+  - between 0 and 1800*9 for x
+  - and y accordingly
+  - note that my `transform` reverses x and y. Note that 0, 0 in processing is the top left corner
