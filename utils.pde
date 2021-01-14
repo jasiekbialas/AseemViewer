@@ -20,6 +20,11 @@ class Point {
     y -= other.y;
   }
   
+  void sub(int x, int y) {
+    this.x -= x;
+    this.y -=y;
+  }
+  
   void mult(float a) {
     x = int(x*a);
     y = int(y*a);

@@ -131,21 +131,18 @@ void keyPressed() {
 
 void rerenderZoom(int sign) {
   
-  int
-    focus_point_x, 
-    focus_point_y;
+  Point focus_point;
   
   if(follow && selected > -1) {
-    focus_point_x = vehicles[selected].curr_position.x;
-    focus_point_y = vehicles[selected].curr_position.y;
+    focus_point = new Point(vehicles[selected].curr_position);
   } else {
-    focus_point_x = mouseX - 50 - (int)moved.x;
-    focus_point_y = mouseY - 50 - (int)moved.y;
+    focus_point = new Point(mouseX-50, mouseY-50);
   }
-  //mouseX - 50 - moved.x
   
-  moved.x += focus_point_x - ((scale+sign)*focus_point_x)/(scale);
-  moved.y += focus_point_y - ((scale+sign)*focus_point_y) /(scale);
+  focus_point.sub(moved);
+  
+  moved.x += focus_point.x - ((scale+sign)*focus_point.x)/(scale);
+  moved.y += focus_point.y - ((scale+sign)*focus_point.y) /(scale);
   
   map = createGraphics(map_width*9/scale, map_height*9/scale);
 
