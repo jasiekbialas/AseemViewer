@@ -55,6 +55,9 @@ void keyPressed() {
     redraw();
     return;
   }
+  if(48 < int(key) && int(key) < 54 && selecting == -2) {
+    show_states[int(key) - 49] = !show_states[int(key) - 49];
+  }
   switch(key) {
     case 10:
       if(selecting > -1) {
@@ -95,9 +98,7 @@ void keyPressed() {
     case 's': moved.y -= 15; break;
     
     //1,2,3 controll if states are displayed
-    case '1': show_states[0] = !show_states[0]; break;
-    case '2': show_states[1] = !show_states[1]; break;
-    case '3': show_states[2] = !show_states[2]; break;
+
     
     case 'e': show_dest = !show_dest; break;
     

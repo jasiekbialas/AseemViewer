@@ -12,7 +12,10 @@ String map_path = "manhattan-compressed.dot";
 PVector[] state_col = { 
   new PVector(255, 120, 0),
   new PVector(14, 227, 24),
-  new PVector(66, 135, 245)
+  new PVector(66, 135, 245),
+  new PVector(218,112,214),
+  new PVector(248, 252, 3)
+  
 };
 
 
@@ -21,8 +24,8 @@ PVector[] state_col = {
 //1840
 
 
-Integer[] states = new Integer[3];
-Boolean[] show_states = {true, true, true};
+Integer[] states = new Integer[5];
+Boolean[] show_states = {true, true, true, true, true};
 String[] states_names = {"available", "assigned", "en route"};
 
 
@@ -103,9 +106,8 @@ void renderVehicles(int t) {
   vehicles_layer.beginDraw();
   vehicles_layer.clear();
   
-  states[0] = 0;
-  states[1] = 0;
-  states[2] = 0;
+
+  for(int i = 0; i < 5; i++) states[i] = 0;
   if(trail_start > -1 && selected > -1) {
     vehicles[selected].drawTrail(vehicles_layer, trail_start);
   }
@@ -149,6 +151,7 @@ void handleSelected() {
   vehicles_layer.stroke(255, 0, 0);
   vehicles_layer.strokeWeight(3);
   vehicles_layer.circle(vehicles[selected].curr_position.x, vehicles[selected].curr_position.y, 10 + 27/scale);
+  vehicles_layer.strokeWeight(1);
 }  //<>//
 
 void displayText() {

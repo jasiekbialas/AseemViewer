@@ -78,7 +78,7 @@ class Vehicle {
       }
     }
     
-    layer.circle(curr_position.x, curr_position.y, 5+ 9/scale);
+    layer.circle(curr_position.x, curr_position.y, 5+9/scale);
   }
   
   void drawTrail(PGraphics layer, int st) {
@@ -127,7 +127,7 @@ class Vehicle {
 Point last;
 
 void initVehicles() {
-  String line, msg_type;
+  String line, msg_type, state_str;
   int log_time, id;
   
   BufferedReader reader = createReader(logs_path);;
@@ -167,13 +167,19 @@ void initVehicles() {
         
         pv = transform(position.getFloat("X"), position.getFloat("Y"));
 
+        state_str = log.getString("VehicleState");
+        state = 0;
         
-        if(log.getString("VehicleState").equals("Available") || log.getString("VehicleState").equals("ArrivedAtPickup") ) {
+        if(state_str.equals("Available")) {
           state = 0;
-        } else if (log.getString("VehicleState").equals("EnrouteToPickup")) {
+        } else if (state_str.equals("EnrouteToPickup")) {
           state = 1;
-        } else {
+        } else if(state_str.equals("EnrouteToDropoff")) {
           state = 2;
+        } else if(state_str.equals("ArrivedAtPickup")) {
+          state = 3;
+        } else if(state_str.equals("ArrivedAtDropoff")) {
+          state = 4;
         }
         
         if(msg_type.equals("FleetMessages.VehicleInit")) {
@@ -187,31 +193,10 @@ void initVehicles() {
           }
         }
         
-        //if(id == 1681) {
-        //  if(log_time > 433700 && log_time < 434400) {
-        //    print(line, "\n");
-        //    print(pv.x, " ", pv.y, "\n\n");
-        //  }
-        //  map.beginDraw();
-        //  if(last != null) {         
-        //    map.stroke(255, 0, 0);
-        //    map.strokeWeight(2);
-        //    map.fill(0, 0, 255); 
-        //    map.line(pv.x/scale, pv.y/scale, last.x/scale, last.y/scale);
-        //    map.strokeWeight(1);
-        //    map.stroke(255);
-        //    map.circle(last.x/scale, last.y/scale, 5);
-        //  }
-        //  last = new Point(pv);
-        //  map.endDraw();
-        //}
-        
-        if(curr_position[id] == null || !curr_position[id].equals(pv)) {
-          //print(curr_position[id], "    ", pv, "\n");
           
-          vehicles[id].add(log_time, pv, dest, state, line);
-          curr_position[id] = new Point(pv);
-        }
+         vehicles[id].add(log_time, pv, dest, state, line);
+         curr_position[id] = new Point(pv);
+
       }
     }
   } catch (IOException e) {
@@ -219,3 +204,22 @@ void initVehicles() {
     line = null;
   }
 }
+
+       //if(id == 1681) {
+       //   if(log_time > 433700 && log_time < 434400) {
+       //     print(line, "\n");
+       //     print(pv.x, " ", pv.y, "\n\n");
+       //   }
+       //   map.beginDraw();
+       //   if(last != null) {         
+       //     map.stroke(255, 0, 0);
+       //     map.strokeWeight(2);
+       //     map.fill(0, 0, 255); 
+       //     map.line(pv.x/scale, pv.y/scale, last.x/scale, last.y/scale);
+       //     map.strokeWeight(1);
+       //     map.stroke(255);
+       //     map.circle(last.x/scale, last.y/scale, 5);
+       //   }
+       //   last = new Point(pv);
+       //   map.endDraw();
+       // }
