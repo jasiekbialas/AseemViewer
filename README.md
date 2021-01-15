@@ -2,19 +2,17 @@
 Viewer for Aseem logs written in processing.
 
 ## Startup
-Add a path to fmLog.log file in 8th line of "viever4.pde" (logs_path):
-```
-String logs_path = "data/fullLog2.log";
-```
 
-For the viewer to load faster it is usefull to parse the file with command line command:
-```
-sed '/BookingRequest/d' data/fmLog2.log > data/vehicleLog2.log 
-```
-since for now it only uses vehicles' positions.
+Create `data` folder in repo's directory.
 
-Simulation will start at the earliest time in log file. If the file was parsed that will be
-initiation of vehicles. In other case it will be first booking request. Time can be fastforwarded with `UP` arrow.
+### Create new project:
+- set `proj_name` variable in `viewer4.pde` to the name of the project
+- add `fmLog.log`(don't change name of the file) file to `data` folder 
+- run sketch
+
+### Start existing project:
+- set `proj_name` variable in `viewer4.pde` to the name of the project one wants to start
+- run sketch
 
 ## Usage
 
@@ -33,3 +31,13 @@ initiation of vehicles. In other case it will be first booking request. Time can
 | `t` | (un)triger rendering trail for selected vehicle |
 | `f` | (un) trigger following the selected vehicle |
 | `r` | stops/starts rendering, (pause with space still renders, just doesn't change the time) |
+
+## Different map
+
+At this point viewer loads manhattan map very naively. Here are the steps to load other location:
+- change `map_path` to path to your .dot map
+- change `n` in `utils.pde` line 80 to number of vertices in your .dot file
+- change `transform` function in `utils.pde` (line 57) to transform UTM coordinates to values:
+  - between 0 and 1800*9 for x
+  - and y accordingly
+  - note that my `transform` reverses x and y. Note that 0, 0 in processing is the top left corner
