@@ -30,11 +30,12 @@ String[] states_names = {"available", "assigned", "en route"};
 
 
 PGraphics 
-map,
+map_layer,
 vehicles_layer,
 cardboard,
 test;
 
+Map map;
 
 Vehicle[] vehicles = new Vehicle[no_of_vehicles];
 
@@ -61,7 +62,7 @@ void setup() {
   cardboard = createGraphics(width, height);
   
   vehicles_layer = createGraphics(map_width*9/scale, map_height*9/scale);
-  map = createGraphics(map_width*9/scale, map_height*9/scale);
+  map_layer = createGraphics(map_width*9/scale, map_height*9/scale);
   
   test = createGraphics(500, 500);
   
@@ -72,7 +73,10 @@ void setup() {
   test.rect(200, 200, 100, 100);
   test.endDraw();
   
-  renderMap();
+  map = new Map(4160);
+  
+  map.loadMap();
+  map.renderMap();
   renderCardboard();
 
   initVehicles();
@@ -180,7 +184,7 @@ void drawLayers() {
   fill(255, 0);
   stroke(0); //<>//
   
-  image(map, 50+moved.x, 50+moved.y);
+  image(map_layer, 50+moved.x, 50+moved.y);
   image(vehicles_layer, 50, 50);
 
   image(cardboard, 0, 0); //<>//

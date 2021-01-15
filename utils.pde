@@ -81,60 +81,6 @@ Point transform(float x, float y) {
   return new Point(int(y), int(x));
 }
 
-void renderMap() {
-  int n = 4160;    // NUMBER OF VERTICES
-  String[] list;
-  String line;
-  Point[] vertices;
-  
-  
-  try {
-      
-      BufferedReader reader = createReader(map_path);
-      line = reader.readLine();
-      float x, y;
-
-      vertices = new Point[n];
-      
-      for(int i = 0; i < n; i++) {
-        line = reader.readLine();
-        list = split(line, "=");
-        
-        x = float(split(list[2], ",")[0]);
-        y = float(split(list[3], ",")[0]);
-  
-        vertices[i] = transform(x, y);
-        vertices[i].div(scale);
-      }
-      
-      int a, b;
-      map.beginDraw();
-      map.clear();
-      map.stroke(100);
-      map.strokeWeight(min(1, 9/scale));
-      
-      while(true) {
-        line = reader.readLine();
-        if(line.charAt(0) == '}') break;
-        list = split(line, " ");
-        a = int(split(list[0], "->")[0]);
-        b = int(split(list[0], "->")[1]);
-        map.line(
-          vertices[a].x,
-          vertices[a].y,
-          vertices[b].x,
-          vertices[b].y
-         );
-        
-      }
-      
-      map.endDraw();
-    
-    } catch (IOException e) {
-      e.printStackTrace();
-      line = null;
-    }
-}
 
 void renderCardboard() {
   cardboard.beginDraw();

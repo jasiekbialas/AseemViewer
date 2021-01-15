@@ -144,7 +144,7 @@ void rerenderZoom(int sign) {
   moved.x += focus_point.x - ((scale+sign)*focus_point.x)/(scale);
   moved.y += focus_point.y - ((scale+sign)*focus_point.y) /(scale);
   
-  map = createGraphics(map_width*9/scale, map_height*9/scale);
+  map_layer = createGraphics(map_width*9/scale, map_height*9/scale);
 
-  renderMap();
+  map.renderMap();
 }
