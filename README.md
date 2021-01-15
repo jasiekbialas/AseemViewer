@@ -6,12 +6,12 @@ Viewer for Aseem logs written in processing.
 Create `data` folder in repo's directory.
 
 ### Create new project:
-- set `proj_name` variable in `viewer4.pde` to name of project
+- set `proj_name` variable in `viewer4.pde` to the name of the project
 - add `fmLog.log`(don't change name of the file) file to `data` folder 
 - run sketch
 
 ### Start existing project:
-- set `proj_name` variable in `viewer4.pde` to name of project one wants to start
+- set `proj_name` variable in `viewer4.pde` to the name of the project one wants to start
 - run sketch
 
 ## Usage
