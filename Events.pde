@@ -110,7 +110,8 @@ void keyPressed() {
       break;
     
     case 'h':
-      selecting = -1;
+      if(selecting == -2) selecting = -1;
+      else selecting = -2;
       break;
       
     case 'f': follow = ! follow; break;
@@ -143,8 +144,6 @@ void rerenderZoom(int sign) {
   
   moved.x += focus_point.x - ((scale+sign)*focus_point.x)/(scale);
   moved.y += focus_point.y - ((scale+sign)*focus_point.y) /(scale);
-  
-  map_layer = createGraphics(map_width*9/scale, map_height*9/scale);
 
   map.renderMap();
 }

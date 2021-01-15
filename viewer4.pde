@@ -5,32 +5,33 @@ map_width = 1800,
 map_height = 820,
 no_of_vehicles = 2000;
 
-String logs_path = "data/fullLog2.log";
+String proj_name = "2";
+
 String map_path = "manhattan-compressed.dot";
 
-//AVAILABLE = 0, ASSIGNED = 1, ENROUTE = 2;
-PVector[] state_col = { 
+
+PVector[] state_colour = { 
   new PVector(255, 120, 0),
   new PVector(14, 227, 24),
   new PVector(66, 135, 245),
   new PVector(218,112,214),
-  new PVector(248, 252, 3)
-  
+  new PVector(248, 232, 0)
 };
 
-
-
-//time: 47056
-//1840
+String[] states_names = {
+  "available", 
+  "en route\nto pickup", 
+  "en route\nto dropoff",
+  "arrived\nat pickup",
+  "arrived\nat dropoff"
+};
 
 
 Integer[] states = new Integer[5];
 Boolean[] show_states = {true, true, true, true, true};
-String[] states_names = {"available", "assigned", "en route"};
 
 
 PGraphics 
-map_layer,
 vehicles_layer,
 cardboard,
 test;
@@ -40,16 +41,18 @@ Map map;
 Vehicle[] vehicles = new Vehicle[no_of_vehicles];
 
 int 
-  scale = 3,            // map scale
+  scale = 4,            // map scale
   fr = 30,              // frame rate
   selected = -1,        // selected
   trail_start= -1,
   time= 2147483647,
-  speed = 10;
+  speed = 10,
+  no_of_states = 5;
 
 Boolean 
   show_dest = false,
-  follow = true;
+  follow = true,
+  vehicles_loaded = false;
 
 Point 
   moved = new Point(0, 0),
@@ -57,54 +60,63 @@ Point
 
 
 void setup() {
+  int t = millis();
   size(1900, 1000);
   
+  textFont(createFont("Ubuntu", 10));
+  
+  File f = new File(dataPath(proj_name));
+  
+  if(!f.exists() && !f.isDirectory()) {
+    print("hey\n");
+    String[] command = {"./process_logs.sh", proj_name};
+    try {
+      Runtime.getRuntime().exec(command, null, new File(sketchPath("")));
+    } catch (Exception e) {
+      println("Error running command!"); 
+      println(e);
+    }
+  }
+  thread("initVehicles");
+
   cardboard = createGraphics(width, height);
   
+  for(int i = 0; i < 5; i++) states[i] = 0;
+  
   vehicles_layer = createGraphics(map_width*9/scale, map_height*9/scale);
-  map_layer = createGraphics(map_width*9/scale, map_height*9/scale);
   
-  test = createGraphics(500, 500);
-  
-  test.beginDraw();
-  test.fill(0);
-  test.rect(100, 100, 300, 300);
-  test.fill(0, 0);
-  test.rect(200, 200, 100, 100);
-  test.endDraw();
-  
-  map = new Map(4160);
-  
-  map.loadMap();
-  map.renderMap();
-  renderCardboard();
 
-  initVehicles();
+  map = new Map(4160, map_path);
   
-  states[0] = 0;
-  states[1] = 0;
-  states[2] = 0;
+  map.renderMap();
+  map.displayMap();
+  
+  renderCardboard();
   
   frameRate(fr);
+  filter(BLUR, 10);
+  
 }
 
-
 void draw() {
-  background(255);
 
   
-  renderVehicles(time);
-  drawLayers();
-  drawInfoBox();
-  displayText();
+  if(!vehicles_loaded) {
+    loadingAnimation();
+  } else {
+    background(255);
+    renderVehicles(time);
+    drawLayers();
+    drawInfoBox();
+    displayText();
+  }
+  
+
   
   if(!paused) time += speed;
   moved.add(adjust_moved);
   adjust_moved.zero();
 }
-
-
-
 
 void renderVehicles(int t) {
   vehicles_layer.beginDraw();
@@ -184,64 +196,66 @@ void drawLayers() {
   fill(255, 0);
   stroke(0); //<>//
   
-  image(map_layer, 50+moved.x, 50+moved.y);
+  map.displayMap();
   image(vehicles_layer, 50, 50);
 
   image(cardboard, 0, 0); //<>//
   rect(50, 50, map_width, map_height);
-  
 }
 
 
 
 void drawInfoBox() {
+  int v_dist = 170, h_dist;
   textSize(20);
-  
-  for(int i = 0; i < 3; i++) {
+  textLeading(22);
+  for(int i = 0; i < no_of_states; i++) {
     fill(0);
-    text(states_names[i], 55 + 200*i, map_height + 135);
-    text(str(states[i]), 90 + 200*i, map_height + 100);
+    text(states_names[i], 55 + v_dist*i, map_height + 135);
+    text(str(states[i]), 90 + v_dist*i, map_height + 100);
     
     fill(255, 0);
     stroke(0);
     strokeWeight(2);
-    rect(55 + 200*i,map_height + 80, 20, 20); 
+    rect(55 + v_dist*i,map_height + 80, 20, 20); 
     
     if(show_states[i]) {
-      
-      fill(state_col[i].x, state_col[i].y, state_col[i].z);
-      stroke(state_col[i].x, state_col[i].y, state_col[i].z);
-      circle(65 + 200*i, map_height+90, 10);
+      setColour(i);
+      circle(65 + v_dist*i, map_height+90, 10);
     }
   }
   
   stroke(0);
   fill(0);
-  String t;
   
   stroke(255, 0, 0);
   fill(255, 0);
   strokeWeight(3);
-  //if(selecting ==-2 || time % 200 > 50)
-  circle(665, map_height+90, 20);
+  circle(65 + v_dist*no_of_states, map_height+90, 20);
   
   fill(0);
   
   if(selecting > -2) {
     float l = 0;
     if(selecting > -1) {
-      text(str(selecting), 690, map_height+100);
+      text(str(selecting), 90 + v_dist*no_of_states, map_height+100);
       l = textWidth(str(selecting));
     }
     strokeWeight(2);
     stroke(0);
-    if(time % 300 > 150) line(690+l+3, map_height+103, 690+l+3, map_height+80);
+    if(second() % 2 > 0) {
+      line(
+        v_dist*no_of_states+90+l+3,
+        map_height+103, 
+        v_dist*no_of_states+90+l+3,
+        map_height+80);
+    }
     
-  } else if(selected > -1) text(str(selected), 690, map_height+100);
+  } else if(selected > -1) text(str(selected), no_of_states*v_dist + 90, map_height+100);
   else {
     fill(100);
-    text("none", 690, map_height+98);
+    text("none", 90 + v_dist*no_of_states, map_height+98);
     fill(0);
   }
-  text("selected", 655, map_height+135);
+  text("selected", 55 + v_dist*no_of_states, map_height+135);
 }

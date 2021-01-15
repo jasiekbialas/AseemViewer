@@ -1,3 +1,24 @@
+Point transform(float x, float y) {
+  float angl = radians(28);
+  
+  x -= 582000;
+  y -= 4505000;
+  
+  //x *= 1000;
+  //y *= 1000;
+  
+  float c = cos(angl);
+  float s = sin(angl);
+  
+  x = c*x-s*y;
+  y = s*x + c*y;
+  
+  y -= 1320;
+  x += 2150;
+
+  return new Point(int(y), int(x));
+}
+
 class Point {
   int x,y;
   Point(int x, int y) {
@@ -47,38 +68,30 @@ class Point {
 
 void setColour(PGraphics layer, int state) {
    layer.stroke(
-    state_col[state].x,
-    state_col[state].y,
-    state_col[state].z
+    state_colour[state].x,
+    state_colour[state].y,
+    state_colour[state].z
   );
   
   layer.fill(
-    state_col[state].x,
-    state_col[state].y,
-    state_col[state].z
+    state_colour[state].x,
+    state_colour[state].y,
+    state_colour[state].z
    );
 }
 
-Point transform(float x, float y) {
-  float angl = radians(28);
+void setColour(int state) {
+  stroke(
+    state_colour[state].x,
+    state_colour[state].y,
+    state_colour[state].z
+  );
   
-  x -= 582000;
-  y -= 4505000;
-  
-  
-  //x *= 1000;
-  //y *= 1000;
-  
-  float c = cos(angl);
-  float s = sin(angl);
-  
-  x = c*x-s*y;
-  y = s*x + c*y;
-  
-  y -= 1320;
-  x += 2150;
-
-  return new Point(int(y), int(x));
+  fill(
+    state_colour[state].x,
+    state_colour[state].y,
+    state_colour[state].z
+   );
 }
 
 
@@ -92,4 +105,27 @@ void renderCardboard() {
   cardboard.rect(map_width+50, 0, 50, height);
   cardboard.rect(0, map_height+50, width, 350);
   cardboard.endDraw();
+}
+
+void loadingAnimation() {
+
+    fill(255);
+    stroke(255);
+    strokeWeight(4);
+    rect(map_width/2 - 200, map_height/2 - 150, 400, 250, 20);
+    fill(64);
+    textSize(50);
+    text("LOADING", map_width/2 - 110, map_height/2 - 60);
+    setColour(0); 
+    
+    for(int i = 0; i < 4; i++) {
+      fill(255, 110 + 10*sin(radians(millis()/3)), 0);
+      stroke(255, 110 + 10*sin(radians(millis()/3)), 0);
+      
+      circle(
+        map_width/2 - 60 + 40*i, 
+        map_height/2+ 20 + sin(radians(millis()/3 + 333*i/4))*20,
+        20
+      );
+    }
 }

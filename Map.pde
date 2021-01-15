@@ -2,23 +2,19 @@ class Map {
   
   int N, edges = 0;
   Point[] vertices;
+  PGraphics map_layer;
   
-  ArrayList<Integer> edge_from;
-  ArrayList<Integer> edge_to;
+  ArrayList<Integer> edge_from = new ArrayList();
+  ArrayList<Integer> edge_to = new ArrayList();
   
-  Map(int n) {
+  Map(int n, String path) {
     this.N = n;
     vertices = new Point[N];
-  }
-  
-  void loadMap() {
-    
     String[] list;
     String line;
   
     try {
-        
-        BufferedReader reader = createReader(map_path);
+        BufferedReader reader = createReader(path);
         line = reader.readLine();
         float x, y;
         
@@ -51,8 +47,10 @@ class Map {
       }
   }
   
+  
   void renderMap() {
     
+    map_layer = createGraphics(map_width*9/scale, map_height*9/scale);
     int a,b;
     map_layer.beginDraw();
     map_layer.clear();
@@ -71,5 +69,9 @@ class Map {
     }
     
     map_layer.endDraw();
+  }
+  
+  void displayMap() {
+    image(map_layer, 50+moved.x, 50+moved.y);
   }
 }

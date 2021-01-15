@@ -130,7 +130,7 @@ void initVehicles() {
   String line, msg_type, state_str;
   int log_time, id;
   
-  BufferedReader reader = createReader(logs_path);;
+  BufferedReader reader = createReader("data/"+proj_name+"/logs.v");
   
   JSONObject log, position;
   int state;
@@ -203,6 +203,7 @@ void initVehicles() {
     e.printStackTrace();
     line = null;
   }
+  vehicles_loaded = true;
 }
 
        //if(id == 1681) {
