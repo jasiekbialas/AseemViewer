@@ -111,21 +111,20 @@ void loadingAnimation() {
 
     fill(255);
     stroke(255);
-    strokeWeight(4);
-    rect(map_width/2 - 200, map_height/2 - 150, 400, 250, 20);
+    strokeWeight(2);
+    //rect(map_width/2 - 120, map_height/2 - 30, 240, 100, 50);
     fill(64);
-    textSize(50);
-    text("LOADING", map_width/2 - 110, map_height/2 - 60);
     setColour(0); 
     
     for(int i = 0; i < 4; i++) {
-      fill(255, 110 + 10*sin(radians(millis()/3)), 0);
-      stroke(255, 110 + 10*sin(radians(millis()/3)), 0);
+      fill(255, 140 + 70*sin(radians(millis()/3 + 333*i/4)), 0);
+      //stroke(255, 130 + 40*sin(radians(millis()/3 + 333*i/4)), 0);
+      stroke(255);
       
       circle(
         map_width/2 - 60 + 40*i, 
         map_height/2+ 20 + sin(radians(millis()/3 + 333*i/4))*20,
-        20
+        23
       );
     }
 }

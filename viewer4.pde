@@ -60,8 +60,10 @@ Point
 
 
 void setup() {
+
   int t = millis();
   size(1900, 1000);
+  background(255);
   
   textFont(createFont("Ubuntu", 10));
   
@@ -94,28 +96,28 @@ void setup() {
   renderCardboard();
   
   frameRate(fr);
-  filter(BLUR, 10);
+  //filter(BLUR, 10);
+
   
 }
 
 void draw() {
-
+  background(255);
   
-  if(!vehicles_loaded) {
-    loadingAnimation();
-  } else {
-    background(255);
+  if(vehicles_loaded) {
     renderVehicles(time);
-    drawLayers();
-    drawInfoBox();
-    displayText();
   }
   
+  drawLayers();
+  drawInfoBox();
+  displayText();
 
+  if(!vehicles_loaded) loadingAnimation();
   
   if(!paused) time += speed;
   moved.add(adjust_moved);
   adjust_moved.zero();
+  
 }
 
 void renderVehicles(int t) {
