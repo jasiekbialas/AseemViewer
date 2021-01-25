@@ -116,8 +116,9 @@ void keyPressed() {
       
     case 'f': follow = ! follow; break;
     case 'r': 
-      windowResized(); 
       if(render) { 
+        windowResized();
+        redraw();
         textSize(400);
         fill(255, 0, 0);
         text("R", width/2 - 170, height/2 + 150);
@@ -130,13 +131,19 @@ void keyPressed() {
 }
 
 void windowResized() {
-    String[] command = {"./window_size.sh", proj_name};
+
     try {
-      Runtime.getRuntime().exec(command, null, new File(sketchPath("")));
-      BufferedReader reader = createReader("data/"+proj_name+"/size");
+      Process p = Runtime.getRuntime().exec("./window_size.sh", null, new File(sketchPath("")));
+      BufferedReader reader = createReader(p.getInputStream());
+      
       int w = int(reader.readLine());
       int h = int(reader.readLine());
+      int x = int(reader.readLine());
+      int y = int(reader.readLine());
+      
+      surface.setLocation(x,y+8);
       surface.setSize(w, h);
+      
     } catch (Exception e) {
       println("Error running resized!"); 
       println(e);
