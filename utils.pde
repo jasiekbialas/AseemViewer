@@ -1,22 +1,26 @@
-Point transform(float x, float y) {
-  float angl = radians(28);
-  
-  x -= 582000;
-  y -= 4505000;
-  
-  //x *= 1000;
-  //y *= 1000;
-  
-  float c = cos(angl);
-  float s = sin(angl);
-  
-  x = c*x-s*y;
-  y = s*x + c*y;
-  
-  y -= 1320;
-  x += 2150;
 
-  return new Point(int(y), int(x));
+Point transform(float x, float y) {
+
+  float 
+    buff,
+    c = cos(angle),
+    s = sin(angle);
+
+  x -= fmin_x;
+  y -= fmin_y;
+  
+  buff = c*x-s*y;
+  y = s*x + c*y;
+  x = buff;
+  
+  x -= min_x;
+  y -= min_y;
+  
+
+  x *= zoom_adj;
+  y *= zoom_adj;
+  
+  return new Point(int(x), int(y));
 }
 
 class Point {
@@ -97,7 +101,7 @@ void setColour(int state) {
 
 void renderCardboard() {
   cardboard.beginDraw();
-  cardboard.fill(255);
+  cardboard.fill(255, 230);
   cardboard.stroke(255);
   
   cardboard.rect(0, 0, width, 50);

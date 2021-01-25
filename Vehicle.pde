@@ -66,8 +66,9 @@ class Vehicle {
   }
   
   void draw(PGraphics layer) {
-    if(curr_position.x < 0 || curr_position.y > map_width || curr_position.y < 0 || curr_position.y > map_height) return;
-    
+
+    if(curr_position.x < 0 || curr_position.x > map_width || curr_position.y < 0 || curr_position.y > map_height) return;
+
     setColour(layer, curr_state);
 
     if(show_dest) {
@@ -78,7 +79,7 @@ class Vehicle {
       }
     }
     
-    layer.circle(curr_position.x, curr_position.y, 5+9/scale);
+    layer.circle(curr_position.x, curr_position.y, 5 + 100/scale);
   }
   
   void drawTrail(PGraphics layer, int st) {
@@ -166,7 +167,7 @@ void initVehicles() {
         position = log.getJSONObject("Location");
         
         pv = transform(position.getFloat("X"), position.getFloat("Y"));
-
+        //println(pv.x, pv.y);
         state_str = log.getString("VehicleState");
         state = 0;
         

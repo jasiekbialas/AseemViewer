@@ -2,8 +2,9 @@
 
 int
 no_of_vehicles = 2000,
-WIDTH = 1500,
-HEIGHT = 1000;
+WIDTH = 1900,
+HEIGHT = 1000,
+ANGLE = 299;
 
 String proj_name = "LAPJV_reb1";
 String map_path = "manhattan-compressed.dot";
@@ -25,9 +26,9 @@ String[] states_names = {
 };
 
 
+
 Integer[] states = new Integer[5];
 Boolean[] show_states = {true, true, true, true, true};
-
 
 PGraphics 
 vehicles_layer,
@@ -40,7 +41,8 @@ Requests requests = new Requests();
 Vehicle[] vehicles = new Vehicle[no_of_vehicles];
 
 int 
-  scale = 4,            // map scale
+  zoom_adj = 100,
+  scale = 60,            // map scale
   fr = 30,              // frame rate
   selected = -1,        // selected
   trail_start= -1,
@@ -49,6 +51,15 @@ int
   no_of_states = 5,
   map_width,
   map_height;
+
+float  
+  max_x = 0,
+  max_y = 0,
+  min_x = Integer.MAX_VALUE,
+  min_y = Integer.MAX_VALUE,
+  fmin_x = Integer.MAX_VALUE,
+  fmin_y = Integer.MAX_VALUE,
+  angle;
 
 Boolean 
   show_dest = false,
@@ -62,6 +73,7 @@ Point
 
 void settings() {
   size(WIDTH, HEIGHT);
+  //fullScreen();
 }
 
 void setup() {
@@ -70,6 +82,7 @@ void setup() {
   
   map_width = width-100;
   map_height = height-130;
+  angle = radians(ANGLE);
   
   background(255);
   
@@ -78,7 +91,6 @@ void setup() {
   File proj_file = new File(dataPath(proj_name));
   
   if(!proj_file.exists() && !proj_file.isDirectory()) {
-    print("hey\n");
     String[] command = {"./process_logs.sh", proj_name};
     try {
       Runtime.getRuntime().exec(command, null, new File(sketchPath("")));
@@ -94,11 +106,10 @@ void setup() {
   
   for(int i = 0; i < 5; i++) states[i] = 0;
   
-  vehicles_layer = createGraphics(map_width*9/scale, map_height*9/scale);
   
-
-  map = new Map(4160, map_path);
+  vehicles_layer = createGraphics(map_width*100/scale, map_height*100/scale);
   
+  map = new Map(map_path);
   map.renderMap();
   map.displayMap();
   
@@ -177,7 +188,7 @@ void handleSelected() {
   vehicles_layer.fill(0,0);
   vehicles_layer.stroke(255, 0, 0);
   vehicles_layer.strokeWeight(3);
-  vehicles_layer.circle(vehicles[selected].curr_position.x, vehicles[selected].curr_position.y, 10 + 27/scale);
+  vehicles_layer.circle(vehicles[selected].curr_position.x, vehicles[selected].curr_position.y, 10 + 300/scale);
   vehicles_layer.strokeWeight(1);
 }  //<>//
 
