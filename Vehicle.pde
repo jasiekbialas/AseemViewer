@@ -32,13 +32,13 @@ class Vehicle {
   
   void update(int t) {
     while(t < times.get(index)) {
-      if(index == 0) return;
+      if(index == 0) break;
       index -= 1;
     }
-    if(index+1 >= times.size()) return;
+    if(index+1 >= times.size()) index = times.size()-2;
     
     while(t >= times.get(index+1)) {
-      if(index+2 >= times.size()) return;
+      if(index+2 >= times.size()) break;
       index +=1;
     }
     

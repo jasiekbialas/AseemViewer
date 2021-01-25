@@ -57,6 +57,14 @@ class Map {
     map_layer.stroke(100);
     map_layer.strokeWeight(min(1, 9/scale));
     
+    //map_layer.textSize(10);
+    //map_layer.stroke(0);
+    //map_layer.fill(0);
+    
+    //for(int i = 0; i < N; i++) {
+    //   print(i,": ", vertices[i].x, " - ", vertices[i].y, "\n");
+    //   map_layer.text(str(i), vertices[i].x/scale, vertices[i].y/scale);
+    //}
     for(int i = 0; i < edges; i++) {
       a = edge_from.get(i);
       b = edge_to.get(i);
@@ -66,6 +74,9 @@ class Map {
         vertices[b].x/scale,
         vertices[b].y/scale
       );
+      //map_layer.text(str(i), 
+      //  (vertices[a].x + vertices[b].x)/(2*scale), 
+      //  (vertices[b].y + vertices[a].y)/(2*scale));
     }
     
     map_layer.endDraw();

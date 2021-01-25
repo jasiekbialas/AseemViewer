@@ -5,10 +5,8 @@ map_width = 1800,
 map_height = 820,
 no_of_vehicles = 2000;
 
-String proj_name = "2";
-
+String proj_name = "LAPJV_reb1";
 String map_path = "manhattan-compressed.dot";
-
 
 PVector[] state_colour = { 
   new PVector(255, 120, 0),
@@ -38,6 +36,7 @@ test;
 
 Map map;
 
+Requests requests = new Requests();
 Vehicle[] vehicles = new Vehicle[no_of_vehicles];
 
 int 
@@ -60,8 +59,6 @@ Point
 
 
 void setup() {
-
-  int t = millis();
   size(1900, 1000);
   background(255);
   
@@ -78,6 +75,7 @@ void setup() {
       println("Error running command!"); 
       println(e);
     }
+    delay(8000);
   }
   thread("initVehicles");
 
@@ -97,7 +95,6 @@ void setup() {
   
   frameRate(fr);
   //filter(BLUR, 10);
-
   
 }
 
