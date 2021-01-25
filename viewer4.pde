@@ -1,9 +1,9 @@
 // ARGUMENTS
 
 int
-map_width = 1800,
-map_height = 820,
-no_of_vehicles = 2000;
+no_of_vehicles = 2000,
+WIDTH = 1500,
+HEIGHT = 1000;
 
 String proj_name = "LAPJV_reb1";
 String map_path = "manhattan-compressed.dot";
@@ -46,7 +46,9 @@ int
   trail_start= -1,
   time= 2147483647,
   speed = 10,
-  no_of_states = 5;
+  no_of_states = 5,
+  map_width,
+  map_height;
 
 Boolean 
   show_dest = false,
@@ -58,15 +60,24 @@ Point
   adjust_moved = new Point(0,0);
 
 
+void settings() {
+  size(WIDTH, HEIGHT);
+}
+
 void setup() {
-  size(1900, 1000);
+  surface.setTitle("AseemViewer");
+  surface.setResizable(true);
+  
+  map_width = width-100;
+  map_height = height-130;
+  
   background(255);
   
   textFont(createFont("Ubuntu", 10));
   
-  File f = new File(dataPath(proj_name));
+  File proj_file = new File(dataPath(proj_name));
   
-  if(!f.exists() && !f.isDirectory()) {
+  if(!proj_file.exists() && !proj_file.isDirectory()) {
     print("hey\n");
     String[] command = {"./process_logs.sh", proj_name};
     try {
@@ -99,6 +110,7 @@ void setup() {
 }
 
 void draw() {
+
   background(255);
   
   if(vehicles_loaded) {
@@ -205,22 +217,22 @@ void drawLayers() {
 
 
 void drawInfoBox() {
-  int v_dist = 170, h_dist;
-  textSize(20);
-  textLeading(22);
+  int v_dist = 170, h_dist = 80;
+  textSize(15);
+  textLeading(17);
   for(int i = 0; i < no_of_states; i++) {
     fill(0);
-    text(states_names[i], 55 + v_dist*i, map_height + 135);
-    text(str(states[i]), 90 + v_dist*i, map_height + 100);
+    text(states_names[i], 55 + v_dist*i, map_height + h_dist + 25);
+    text(str(states[i]), 90 + v_dist*i, map_height + h_dist);
     
     fill(255, 0);
     stroke(0);
     strokeWeight(2);
-    rect(55 + v_dist*i,map_height + 80, 20, 20); 
+    rect(55 + v_dist*i,map_height + h_dist - 15, 20, 20); 
     
     if(show_states[i]) {
       setColour(i);
-      circle(65 + v_dist*i, map_height+90, 10);
+      circle(65 + v_dist*i, map_height+h_dist-5, 10);
     }
   }
   
@@ -230,14 +242,14 @@ void drawInfoBox() {
   stroke(255, 0, 0);
   fill(255, 0);
   strokeWeight(3);
-  circle(65 + v_dist*no_of_states, map_height+90, 20);
+  circle(65 + v_dist*no_of_states, map_height+h_dist-5, 20);
   
   fill(0);
   
   if(selecting > -2) {
     float l = 0;
     if(selecting > -1) {
-      text(str(selecting), 90 + v_dist*no_of_states, map_height+100);
+      text(str(selecting), 90 + v_dist*no_of_states, map_height+h_dist);
       l = textWidth(str(selecting));
     }
     strokeWeight(2);
@@ -245,16 +257,16 @@ void drawInfoBox() {
     if(second() % 2 > 0) {
       line(
         v_dist*no_of_states+90+l+3,
-        map_height+103, 
+        map_height+h_dist+3, 
         v_dist*no_of_states+90+l+3,
-        map_height+80);
+        map_height+h_dist-18);
     }
     
-  } else if(selected > -1) text(str(selected), no_of_states*v_dist + 90, map_height+100);
+  } else if(selected > -1) text(str(selected), no_of_states*v_dist + 90, map_height+h_dist);
   else {
     fill(100);
-    text("none", 90 + v_dist*no_of_states, map_height+98);
+    text("none", 90 + v_dist*no_of_states, map_height+h_dist-2);
     fill(0);
   }
-  text("selected", 55 + v_dist*no_of_states, map_height+135);
+  text("selected", 55 + v_dist*no_of_states, map_height+h_dist+25);
 }

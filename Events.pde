@@ -116,6 +116,7 @@ void keyPressed() {
       
     case 'f': follow = ! follow; break;
     case 'r': 
+      windowResized(); 
       if(render) { 
         textSize(400);
         fill(255, 0, 0);
@@ -124,10 +125,28 @@ void keyPressed() {
       }
       else loop();
       render = !render;
-      break; 
-    
+      break;  
   }
+}
 
+void windowResized() {
+    String[] command = {"./window_size.sh", proj_name};
+    try {
+      Runtime.getRuntime().exec(command, null, new File(sketchPath("")));
+      BufferedReader reader = createReader("data/"+proj_name+"/size");
+      int w = int(reader.readLine());
+      int h = int(reader.readLine());
+      surface.setSize(w, h);
+    } catch (Exception e) {
+      println("Error running resized!"); 
+      println(e);
+    }
+    
+    map_width = width-100;
+    map_height = height-130;
+    
+    cardboard = createGraphics(width, height);
+    renderCardboard();
 }
 
 void rerenderZoom(int sign) {
