@@ -68,6 +68,11 @@ class Point {
     x = 0;
     y = 0;
   }
+  
+  Boolean withinRectangle(int x1, int y1, int x2, int y2) {
+    if(x < x1 || x > x2 || y < y1 || y > y2) return false;
+    return true;
+  }
 }
 
 void setColour(PGraphics layer, int state) {

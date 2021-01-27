@@ -20,7 +20,7 @@ void mouseClicked() {
     
     for(Vehicle v : vehicles) {
       if(v.curr_position == null) continue;
-      if(abs(mouseX - 50 - v.curr_position.x) < 5+9/scale && (abs(mouseY - 50 - v.curr_position.y) < 5+9/scale)) {
+      if(abs(mouseX - 50 - v.curr_position.x) < 5+50/scale && (abs(mouseY - 50 - v.curr_position.y) < 5+9/scale)) {
         if(v.id == selected) {
           trail_start = -1;
           selected = -1;
@@ -81,13 +81,13 @@ void keyPressed() {
       
     // -, +(=) control zoom
     case '-':
-      scale+=1;
-      rerenderZoom(-1);
+      scale+=5;
+      rerenderZoom(-5);
       break;
     case '=':
-      if(scale > 1) {
-        scale-=1;    
-        rerenderZoom(1);
+      if(scale > 5) {
+        scale-=5;    
+        rerenderZoom(5);
       }
       break;
       

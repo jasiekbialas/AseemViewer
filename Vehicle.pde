@@ -67,7 +67,7 @@ class Vehicle {
   
   void draw(PGraphics layer) {
 
-    if(curr_position.x < 0 || curr_position.x > map_width || curr_position.y < 0 || curr_position.y > map_height) return;
+    if(!curr_position.withinRectangle(0, 0, map_width, map_height)) return;
 
     setColour(layer, curr_state);
 

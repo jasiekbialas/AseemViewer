@@ -98,9 +98,20 @@ class Map {
   
   void renderMap() {
     
-    map_layer = createGraphics(map_width*100/scale, map_height*100/scale);
-    println("map:", map_width*100/scale);
-    int a,b;
+    int w = width;
+    int h = height;
+    int x1, y1, x2, y2;
+    if(scale > 40) {
+      w = int(max_x - min_x)*zoom_adj/scale;
+      h = int(max_y - min_y)*zoom_adj/scale;
+    }
+
+    
+    map_layer = createGraphics(w, h);
+    println("map:", w, h);
+    
+    Point a,b;
+    
     map_layer.beginDraw();
     map_layer.clear();
     map_layer.stroke(100);
@@ -115,14 +126,28 @@ class Map {
     //   map_layer.text(str(i), vertices[i].x/scale, vertices[i].y/scale);
     //}
     for(int i = 0; i < edges; i++) {
-      a = edge_from.get(i);
-      b = edge_to.get(i);
+      a = new Point(vertices.get(edge_from.get(i)));
+      b = new Point(vertices.get(edge_to.get(i)));
+      a.div(scale);
+      b.div(scale);
+      
+      if(scale > 40) {
+
+      } else {
+        a.add(moved);
+        b.add(moved);
+        
+        if(
+          !a.withinRectangle(-50, -50, map_width+50, map_height+50) &&
+          !b.withinRectangle(-50, -50, map_width+50, map_height+50)
+          ) continue;
+      }
       map_layer.line(
-        vertices.get(a).x/scale,
-        vertices.get(a).y/scale,
-        vertices.get(b).x/scale,
-        vertices.get(b).y/scale
-      );
+          a.x,
+          a.y,
+          b.x,
+          b.y
+        );
       //map_layer.text(str(i), 
       //  (vertices[a].x + vertices[b].x)/(2*scale), 
       //  (vertices[b].y + vertices[a].y)/(2*scale));
@@ -132,6 +157,12 @@ class Map {
   }
   
   void displayMap() {
-    image(map_layer, 50+moved.x, 50+moved.y);
+    if(scale <= 40) {
+      renderMap(); 
+      image(map_layer, 50, 50);
+    } else {
+      image(map_layer, 50+moved.x, 50+moved.y);
+    }
+    
   }
 }
